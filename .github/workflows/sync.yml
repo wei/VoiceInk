@@ -135,14 +135,14 @@ jobs:
         run: |
           TAG="${{ needs.check.outputs.new_tag }}"
           NAME="${{ needs.check.outputs.release_name }}"
-          BODY=$(cat <<'RELEASE_EOF'
+          NOTES_FILE=$(mktemp)
+          cat > "$NOTES_FILE" <<'RELEASE_EOF'
           ${{ needs.check.outputs.release_body }}
           RELEASE_EOF
-          )
 
           gh release create "$TAG" \
             ~/Downloads/VoiceInk-macOS-arm64.zip \
             --repo "${{ github.repository }}" \
             --target auto \
             --title "${NAME:-$TAG}" \
-            --notes "$BODY"
+            --notes-file "$NOTES_FILE"
