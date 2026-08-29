@@ -116,7 +116,11 @@ jobs:
           key: whisper-xcframework-macos-arm64-v1
 
       - name: Build VoiceInk (local/unsigned)
-        run: make local
+        run: |
+          # SwiftPM macros (MLXHuggingFaceMacros) need interactive trust; CI can't grant it.
+          grep -q 'xcodebuild -project VoiceInk.xcodeproj' Makefile
+          sed -i '' 's/xcodebuild -project VoiceInk.xcodeproj/xcodebuild -skipMacroValidation -project VoiceInk.xcodeproj/g' Makefile
+          make local
 
       - name: Verify build
         run: |
