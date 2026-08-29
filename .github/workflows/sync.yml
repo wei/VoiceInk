@@ -117,11 +117,11 @@ jobs:
 
       - name: Build VoiceInk (local/unsigned)
         run: |
-          # -skipMacroValidation: SwiftPM macro trust is interactive; CI can't grant it.
+          # -skip*Validation: SwiftPM macro and plugin trust is interactive; CI can't grant it.
           # -onlyUsePackageVersionsFromResolvedFile: CI otherwise re-resolves mlx-swift
           # down to 0.31.4, which lacks APIs the pinned mlx-swift-lm revision needs.
           grep -q 'xcodebuild -project VoiceInk.xcodeproj' Makefile
-          sed -i '' 's/xcodebuild -project VoiceInk.xcodeproj/xcodebuild -skipMacroValidation -onlyUsePackageVersionsFromResolvedFile -project VoiceInk.xcodeproj/g' Makefile
+          sed -i '' 's/xcodebuild -project VoiceInk.xcodeproj/xcodebuild -skipMacroValidation -skipPackagePluginValidation -onlyUsePackageVersionsFromResolvedFile -project VoiceInk.xcodeproj/g' Makefile
           make local
 
       - name: Verify build
